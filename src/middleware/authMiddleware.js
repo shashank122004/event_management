@@ -107,21 +107,21 @@ export const authenticateAdmin = (req, res, next) => {
 
 /**
  * Conditional Authentication Middleware for Event Queries
- * Requires admin JWT for queries that expose non-public event data:
- *   - status=Draft (any isPublished value)
- *   - isPublished=false (any status)
- * All other queries (e.g. status=Open&isPublished=true) remain public.
+ * Requires admin JWT for all queries EXCEPT:
+ *   - status=Open AND isPublished=true (public access to published open events)
+ * All other queries require admin authentication.
  */
 export const authenticateAdminForRestrictedQuery = (req, res, next) => {
   const { status, isPublished } = req.query;
-  const isDraft = status === 'Draft';
-  const isUnpublished = isPublished === 'false';
+  const isPublicQuery = status === 'Open' && isPublished === 'true';
 
-  if (isDraft || isUnpublished) {
-    return authenticateAdmin(req, res, next);
+  // Allow public access only for status=Open&isPublished=true
+  if (isPublicQuery) {
+    return next();
   }
 
-  next();
+  // All other queries require admin authentication
+  return authenticateAdmin(req, res, next);
 };
 
 /**

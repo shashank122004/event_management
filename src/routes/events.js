@@ -29,10 +29,10 @@ const upload = multer({
 });
 
 /**
- * Public Event Routes (No authentication required)
+ * Protected Event Routes
  */
 
-// Get all events - public for Open+published, admin required for Draft or unpublished queries
+// Get all events - Admin required (public only for status=Open&isPublished=true query)
 router.get('/', authenticateAdminForRestrictedQuery, getAllEventsHandler);
 
 /**

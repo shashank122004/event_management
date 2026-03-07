@@ -741,11 +741,11 @@ Authorization: Bearer <admin_jwt_token>
 ### Events
 
 #### `GET /events`
-Retrieve all events. Public for open/published events. Returns draft or unpublished events only with a valid admin token.
+Retrieve all events with filters. Admin authentication required, except for a specific public query.
 
 **Authentication:**
-- Public (no token) — returns only `published` + non-Draft events
-- Admin JWT required if query includes `status=Draft` or `isPublished=false`
+- Admin JWT required by default
+- Public access (no token) allowed ONLY for: `status=Open&isPublished=true`
 
 **Query Parameters:**
 | Param | Type | Description |
@@ -756,11 +756,13 @@ Retrieve all events. Public for open/published events. Returns draft or unpublis
 
 **Example Requests:**
 ```
-GET /events                          → all published events (public)
-GET /events?status=Open              → open published events (public)
-GET /events?status=Draft             → requires admin token
-GET /events?isPublished=false        → requires admin token
-GET /events?venueID=2                → filter by venue
+GET /events?status=Open&isPublished=true              → public (no auth required)
+GET /events                                           → requires admin token
+GET /events?status=Open                               → requires admin token
+GET /events?status=Draft                              → requires admin token
+GET /events?isPublished=false                         → requires admin token
+GET /events?venueID=2                                 → requires admin token
+GET /events?status=Open&isPublished=true&venueID=2    → requires admin token (has extra params)
 ```
 
 **Response `200`:**
@@ -1277,8 +1279,8 @@ Pending → UnderReview → Success (Confirmed registration)
 
 | Endpoint | Public | User JWT | Admin (Role 3) | Admin (Role 2) | Admin (Role 1) |
 |----------|--------|----------|---------------|---------------|---------------|
-| `GET /events` (published) | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `GET /events` (drafts) | ❌ | ❌ | ✅ | ✅ | ✅ |
+| `GET /events?status=Open&isPublished=true` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `GET /events` (all other queries) | ❌ | ❌ | ✅ | ✅ | ✅ |
 | `GET /events/:id` | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `POST /events/:id/register` | ❌ | ✅ | ❌ | ❌ | ❌ |
 | `POST /payments/:id/screenshot` | ❌ | ✅ | ❌ | ❌ | ❌ |
