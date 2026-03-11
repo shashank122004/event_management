@@ -4,11 +4,12 @@
  *   initiateRegistrationHandler   →  POST /events/:id/register
  *   uploadScreenshotHandler       →  POST /payments/:paymentId/screenshot
  */
-import { initiateRegistration } from '../services/registrationService.js';
+import { initiateRegistration, getEventNameByRegId } from '../services/registrationService.js';
 import { attachScreenshot } from '../services/paymentService.js';
 import { uploadScreenshot } from '../utils/supabaseClient.js';
 import { APIError } from '../utils/errors.js';
 import { ERROR_CODES } from '../constants/errorCodes.js';
+import { sendEventRegistrationPendingEmail, sendPaymentScreenshotUploadedEmail } from '../utils/emailService.js';
 
 // ---------------------------------------------------------------------------
 // POST /events/:id/register
@@ -29,10 +30,24 @@ export const initiateRegistrationHandler = async (req, res, next) => {
 
     const result = await initiateRegistration(userId, eventId);
 
+    // Send event registration pending email (non-blocking soft-fail)
+    const emailResult = await sendEventRegistrationPendingEmail({
+      to: req.user.userEmail,
+      fullName: req.user.userName,
+      eventName: result.event.eventName,
+      amount: result.amount,
+      qrCodeUrl: result.qrCodeUrl,
+      regDate: result.registration.regDate,
+    });
+
     return res.status(201).json({
       success: true,
       message: 'Registration initiated. Scan the QR code and upload payment proof to confirm.',
-      data: result,
+      data: {
+        ...result,
+        emailSent: emailResult.success,
+        ...(emailResult.messageId && { emailMessageId: emailResult.messageId }),
+      },
     });
   } catch (err) {
     next(err);
@@ -77,10 +92,23 @@ export const uploadScreenshotHandler = async (req, res, next) => {
     // Update payment record
     const payment = await attachScreenshot(Number(paymentId), userId, screenshotUrl);
 
+    // Send screenshot upload confirmation email (non-blocking soft-fail)
+    const eventName = await getEventNameByRegId(payment.RegID);
+    const emailResult = await sendPaymentScreenshotUploadedEmail({
+      to: req.user.userEmail,
+      fullName: req.user.userName,
+      eventName: eventName ?? 'your event',
+      amount: parseFloat(payment.Amount) || 0,
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Screenshot uploaded. Your payment is under review.',
-      data: { payment },
+      data: {
+        payment,
+        emailSent: emailResult.success,
+        ...(emailResult.messageId && { emailMessageId: emailResult.messageId }),
+      },
     });
   } catch (err) {
     next(err);

@@ -9,6 +9,7 @@ import {
   updateUserProfile,
 } from '../services/userRegistrationService.js';
 import { generateJWT, createTokenResponse } from '../utils/jwt.js';
+import { sendUserRegistrationEmail, sendUserProfileUpdateEmail } from '../utils/emailService.js';
 
 /**
  * POST /users/register
@@ -41,6 +42,14 @@ export const registerUserHandler = async (req, res, next) => {
     });
     const tokenResponse = createTokenResponse(jwtToken);
 
+    // Send registration confirmation email (non-blocking soft-fail)
+    const emailResult = await sendUserRegistrationEmail({
+      to: user.Email,
+      fullName: user.FullName,
+      studentID: user.StudentID,
+      username: user.Username,
+    });
+
     // Return success response
     res.status(201).json({
       success: true,
@@ -59,6 +68,8 @@ export const registerUserHandler = async (req, res, next) => {
           createdAt: user.CreatedAt,
         },
         token: tokenResponse,
+        emailSent: emailResult.success,
+        ...(emailResult.messageId && { emailMessageId: emailResult.messageId }),
       },
     });
   } catch (error) {
@@ -218,11 +229,27 @@ export const updateUserProfileHandler = async (req, res, next) => {
     // Update user
     const updatedUser = await updateUserProfile(userId, req.validated);
 
+    // Build summary of changed fields for the email (password value is never sent)
+    const updatedFields = {};
+    if (req.validated.fullName) updatedFields.fullName = updatedUser.FullName;
+    if (req.validated.phone)    updatedFields.phone = updatedUser.Phone;
+    if (req.validated.password) updatedFields.passwordChanged = true;
+
+    // Send profile update notification email (non-blocking soft-fail)
+    const emailResult = await sendUserProfileUpdateEmail({
+      to: updatedUser.Email,
+      fullName: updatedUser.FullName,
+      username: updatedUser.Username,
+      updatedFields,
+    });
+
     // Return success response
     res.status(200).json({
       success: true,
       message: 'User profile updated successfully',
       data: {
+        emailSent: emailResult.success,
+        ...(emailResult.messageId && { emailMessageId: emailResult.messageId }),
         user: {
           userID: updatedUser.UserID,
           studentID: updatedUser.StudentID,

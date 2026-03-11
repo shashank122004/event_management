@@ -112,3 +112,38 @@ export const initiateRegistration = async (userId, eventId) => {
       : 'This is a free event. Your registration is pending admin confirmation.',
   };
 };
+
+// ---------------------------------------------------------------------------
+// Get event name by registration ID (used for email notifications)
+// ---------------------------------------------------------------------------
+export const getEventNameByRegId = async (regId) => {
+  const query = `
+    SELECT e."EventName"
+    FROM "Registration" r
+    JOIN "Event" e ON e."EventID" = r."EventID"
+    WHERE r."RegID" = $1
+    LIMIT 1
+  `;
+  const result = await pool.query(query, [Number(regId)]);
+  return result.rows[0]?.EventName ?? null;
+};
+
+// ---------------------------------------------------------------------------
+// Get user email, full name, and event name by registration ID
+// Used for payment approval / rejection email notifications
+// ---------------------------------------------------------------------------
+export const getRegistrationEmailContext = async (regId) => {
+  const query = `
+    SELECT
+      u."Email"     AS "userEmail",
+      u."FullName"  AS "userFullName",
+      e."EventName" AS "eventName"
+    FROM "Registration" r
+    JOIN "User"  u ON u."UserID"  = r."UserID"
+    JOIN "Event" e ON e."EventID" = r."EventID"
+    WHERE r."RegID" = $1
+    LIMIT 1
+  `;
+  const result = await pool.query(query, [Number(regId)]);
+  return result.rows[0] ?? null;
+};

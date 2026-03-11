@@ -18,9 +18,10 @@
    - [Admin](#admin)
    - [Events](#events)
    - [Payments](#payments)
-6. [Payment Flow (End-to-End)](#payment-flow-end-to-end)
-7. [Role-Based Access Control](#role-based-access-control)
-8. [Postman Setup Guide](#postman-setup-guide)
+6. [Email Notifications](#email-notifications)
+7. [Payment Flow (End-to-End)](#payment-flow-end-to-end)
+8. [Role-Based Access Control](#role-based-access-control)
+9. [Postman Setup Guide](#postman-setup-guide)
 
 ---
 
@@ -36,6 +37,7 @@ The GFG Event Management API is a RESTful backend that powers event creation, us
 | Auth | JWT (Bearer token) |
 | File Storage | Supabase Storage |
 | Payment | Manual QR Code Flow |
+| Email | Google Apps Script Web App |
 
 ---
 
@@ -274,7 +276,9 @@ Register a new user account. Returns a JWT token on success.
       "token": "<jwt_string>",
       "type": "Bearer",
       "expiresAt": "2026-03-02T10:00:00.000Z"
-    }
+    },
+    "emailSent": true,
+    "emailMessageId": "<message_id>"
   }
 }
 ```
@@ -429,7 +433,8 @@ Authorization: Bearer <user_jwt_token>
   "success": true,
   "message": "User profile updated successfully",
   "data": {
-    "user": { "...updated user fields..." }
+    "user": { "...updated user fields..." },
+    "emailSent": true
   }
 }
 ```
@@ -506,7 +511,9 @@ Register a new admin account using an invitation code.
       "token": "<admin_jwt_string>",
       "type": "Bearer",
       "expiresAt": "2026-03-02T10:00:00.000Z"
-    }
+    },
+    "emailSent": true,
+    "emailMessageId": "<message_id>"
   }
 }
 ```
@@ -614,7 +621,8 @@ Authorization: Bearer <admin_jwt_token>
       "currentYear": 3,
       "createdAt": "2026-03-01T10:00:00.000Z",
       "updatedAt": "2026-03-01T11:00:00.000Z"
-    }
+    },
+    "emailSent": true
   }
 }
 ```
@@ -688,7 +696,9 @@ Authorization: Bearer <admin_jwt_token>
   "message": "Payment approved. Registration confirmed.",
   "data": {
     "payment": { "...updated payment record..." },
-    "registration": { "...updated registration record..." }
+    "registration": { "...updated registration record..." },
+    "emailSent": true,
+    "emailMessageId": "<message_id>"
   }
 }
 ```
@@ -731,7 +741,9 @@ Authorization: Bearer <admin_jwt_token>
   "message": "Payment rejected. Registration cancelled.",
   "data": {
     "payment": { "...updated payment record..." },
-    "registration": { "...updated registration record..." }
+    "registration": { "...updated registration record..." },
+    "emailSent": true,
+    "emailMessageId": "<message_id>"
   }
 }
 ```
@@ -1106,7 +1118,9 @@ Authorization: Bearer <user_jwt_token>
       "regDate": "2026-03-01T09:00:00.000Z",
       "regStatus": "Pending"
     },
-    "instructions": "Scan the QR code to complete your payment, then upload a screenshot as proof."
+    "instructions": "Scan the QR code to complete your payment, then upload a screenshot as proof.",
+    "emailSent": true,
+    "emailMessageId": "<message_id>"
   }
 }
 ```
@@ -1211,7 +1225,9 @@ Content-Type: multipart/form-data
       "PaymentStatus": "UnderReview",
       "ScreenshotURL": "https://storage.supabase.co/screenshots/pay_10_42_1234567890.jpg",
       "CreatedAt": "2026-03-01T09:00:00.000Z"
-    }
+    },
+    "emailSent": true,
+    "emailMessageId": "<message_id>"
   }
 }
 ```
@@ -1224,6 +1240,140 @@ Content-Type: multipart/form-data
 | `INVALID_STATUS_TRANSITION` | 409 | Payment is not in `Pending` or `Failed` status |
 | `INVALID_INPUT` | 400 | No file uploaded or unsupported file type |
 | `INVALID_INPUT` | 400 | File exceeds 5 MB limit |
+
+---
+
+## Email Notifications
+
+The API integrates with a **Google Apps Script Web App** to send transactional emails. Every triggering endpoint includes `emailSent: boolean` (and `emailMessageId: string` on success) in its response. Email delivery is **soft-fail** — a failure never blocks or alters the API response.
+
+### Configuration
+
+| Environment Variable | Description |
+|----------------------|-------------|
+| `APPS_SCRIPT_BASE_URL` | Base URL of the deployed Google Apps Script Web App |
+| `APPS_SCRIPT_API_KEY` | API key sent in the request body for Apps Script authentication |
+
+### Email Triggers Summary
+
+| # | Endpoint | Apps Script Route | Recipient |
+|---|----------|-------------------|-----------|
+| 1 | `POST /users/register` | `sendUserRegistrationEmail` | Newly registered user |
+| 2 | `PUT /users/:userId` | `sendUserUpdateProfileEmail` | Updated user |
+| 3 | `POST /admin/onboard` | `sendAdminRegistrationEmail` | Newly onboarded admin |
+| 4 | `PUT /admin/:adminId` | `sendAdminUpdateProfileEmail` | Updated admin |
+| 5 | `POST /events/:id/register` | `sendUserEventRegistrationPending` | User who registered |
+| 6 | `POST /payments/:paymentId/screenshot` | `sendPaymentScreenshotUploaded` | User who uploaded screenshot |
+| 7 | `PUT /admin/payments/:paymentId/approve` | `sendPaymentApproved` | User whose payment was approved |
+| 8 | `PUT /admin/payments/:paymentId/reject` | `sendPaymentRejected` | User whose payment was rejected |
+
+### Email Trigger Details
+
+#### 1. User Registration Email
+**Trigger:** `POST /users/register` (on success)  
+**Apps Script Route:** `?route=sendUserRegistrationEmail`
+
+| Payload Field | Value |
+|---------------|-------|
+| `to` | User's email |
+| `fullName` | User's full name |
+| `studentID` | User's student ID |
+| `username` | User's username |
+
+---
+
+#### 2. User Profile Update Email
+**Trigger:** `PUT /users/:userId` (on success)  
+**Apps Script Route:** `?route=sendUserUpdateProfileEmail`
+
+| Payload Field | Value |
+|---------------|-------|
+| `to` | User's email |
+| `fullName` | User's full name |
+| `username` | User's username |
+| `updatedFields` | Object with changed fields: `{ fullName?, phone?, passwordChanged? }` |
+
+---
+
+#### 3. Admin Registration Email
+**Trigger:** `POST /admin/onboard` (on success)  
+**Apps Script Route:** `?route=sendAdminRegistrationEmail`
+
+| Payload Field | Value |
+|---------------|-------|
+| `to` | Admin's email |
+| `fullName` | Admin's full name |
+| `studentID` | Admin's student ID |
+| `roleName` | Role name (e.g. `Core Member / Event Manager`) |
+| `branchName` | Branch name (e.g. `Computer Science`) |
+| `graduationYear` | Admin's graduation year |
+
+---
+
+#### 4. Admin Profile Update Email
+**Trigger:** `PUT /admin/:adminId` (on success)  
+**Apps Script Route:** `?route=sendAdminUpdateProfileEmail`
+
+| Payload Field | Value |
+|---------------|-------|
+| `to` | Admin's email |
+| `fullName` | Admin's full name |
+| `updatedFields` | Object with changed fields: `{ fullName?, phone?, passwordChanged? }` |
+
+---
+
+#### 5. Event Registration Pending Email
+**Trigger:** `POST /events/:id/register` (on success)  
+**Apps Script Route:** `?route=sendUserEventRegistrationPending`
+
+| Payload Field | Value |
+|---------------|-------|
+| `to` | User's email |
+| `fullName` | User's full name |
+| `eventName` | Name of the registered event |
+| `amount` | Registration fee amount |
+| `qrCodeUrl` | URL of the QR code to scan for payment |
+| `regDate` | Registration timestamp |
+
+---
+
+#### 6. Payment Screenshot Uploaded Email
+**Trigger:** `POST /payments/:paymentId/screenshot` (on success)  
+**Apps Script Route:** `?route=sendPaymentScreenshotUploaded`
+
+| Payload Field | Value |
+|---------------|-------|
+| `to` | User's email |
+| `fullName` | User's full name |
+| `eventName` | Name of the event |
+| `amount` | Payment amount |
+
+---
+
+#### 7. Payment Approved Email
+**Trigger:** `PUT /admin/payments/:paymentId/approve` (on success)  
+**Apps Script Route:** `?route=sendPaymentApproved`
+
+| Payload Field | Value |
+|---------------|-------|
+| `to` | User's email |
+| `fullName` | User's full name |
+| `eventName` | Name of the event |
+| `amount` | Payment amount |
+
+---
+
+#### 8. Payment Rejected Email
+**Trigger:** `PUT /admin/payments/:paymentId/reject` (on success)  
+**Apps Script Route:** `?route=sendPaymentRejected`
+
+| Payload Field | Value |
+|---------------|-------|
+| `to` | User's email |
+| `fullName` | User's full name |
+| `eventName` | Name of the event |
+| `amount` | Payment amount |
+| `reason` | Rejection reason (optional, from request body) |
 
 ---
 

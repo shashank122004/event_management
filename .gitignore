@@ -1,14 +1,17 @@
 # Dependencies
 node_modules/
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
+# NOTE: package-lock.json should be committed for reproducible installs
 
 # Environment variables (SENSITIVE - NEVER COMMIT)
 .env
 .env.local
 .env.*.local
-.env.production.local
+.env.production
+.env.staging
+.env.development
+.env.test
 
 # Logs
 logs/
@@ -66,6 +69,13 @@ coverage/
 tmp/
 temp/
 .tmp/
+
+# Secrets and certificates
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
 
 # Database and backups
 *.db

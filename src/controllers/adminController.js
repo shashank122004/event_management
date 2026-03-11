@@ -2,7 +2,7 @@
  * Admin Onboarding Controller
  * Handles HTTP requests for admin registration endpoint
  */
-import { onboardAdmin, loginAdmin, updateAdmin } from '../services/adminOnboardingService.js';
+import { onboardAdmin, loginAdmin, updateAdmin, validateRole, validateBranch } from '../services/adminOnboardingService.js';
 import { generateJWT, createTokenResponse } from '../utils/jwt.js';
 import { createValidationError } from '../utils/errors.js';
 import { ERROR_CODES } from '../constants/errorCodes.js';
@@ -11,6 +11,8 @@ import {
   approvePayment,
   rejectPayment,
 } from '../services/paymentService.js';
+import { sendAdminRegistrationEmail, sendAdminProfileUpdateEmail, sendPaymentApprovedEmail, sendPaymentRejectedEmail } from '../utils/emailService.js';
+import { getRegistrationEmailContext } from '../services/registrationService.js';
 
 /**
  * POST /admin/onboard
@@ -38,11 +40,28 @@ export const onboardAdminHandler = async (req, res, next) => {
     const jwtToken = generateJWT(admin);
     const tokenResponse = createTokenResponse(jwtToken);
 
+    // Send admin onboarding confirmation email (non-blocking soft-fail)
+    const [roleData, branchData] = await Promise.all([
+      validateRole(admin.RoleID),
+      validateBranch(admin.BranchID),
+    ]);
+
+    const emailResult = await sendAdminRegistrationEmail({
+      to: admin.Email,
+      fullName: admin.FullName,
+      studentID: admin.StudentID,
+      roleName: roleData.RoleName,
+      branchName: branchData?.BranchName ?? null,
+      graduationYear: admin.GraduationYear,
+    });
+
     // Return success response
     res.status(201).json({
       success: true,
       message: 'Admin onboarded successfully',
       data: {
+        emailSent: emailResult.success,
+        ...(emailResult.messageId && { emailMessageId: emailResult.messageId }),
         admin: {
           adminID: admin.AdminID,
           studentID: admin.StudentID,
@@ -142,11 +161,26 @@ export const updateAdminHandler = async (req, res, next) => {
     // Execute update service
     const admin = await updateAdmin(id, validatedData);
 
+    // Build summary of changed fields for the email (password value is never sent)
+    const updatedFields = {};
+    if (validatedData.fullName) updatedFields.fullName = admin.FullName;
+    if (validatedData.phone)    updatedFields.phone = admin.Phone;
+    if (validatedData.password) updatedFields.passwordChanged = true;
+
+    // Send profile update notification email (non-blocking soft-fail)
+    const emailResult = await sendAdminProfileUpdateEmail({
+      to: admin.Email,
+      fullName: admin.FullName,
+      updatedFields,
+    });
+
     // Return success response
     res.status(200).json({
       success: true,
       message: 'Admin details updated successfully',
       data: {
+        emailSent: emailResult.success,
+        ...(emailResult.messageId && { emailMessageId: emailResult.messageId }),
         admin: {
           adminID: admin.AdminID,
           studentID: admin.StudentID,
@@ -201,6 +235,18 @@ export const approvePaymentHandler = async (req, res, next) => {
     }
 
     const result = await approvePayment(id);
+
+    // Send payment approved email (non-blocking soft-fail)
+    const ctx = await getRegistrationEmailContext(result.registration.RegID);
+    if (ctx) {
+      await sendPaymentApprovedEmail({
+        to: ctx.userEmail,
+        fullName: ctx.userFullName,
+        eventName: ctx.eventName,
+        amount: parseFloat(result.payment.Amount) || 0,
+      });
+    }
+
     return res.status(200).json({
       success: true,
       message: 'Payment approved. Registration confirmed.',
@@ -228,6 +274,18 @@ export const rejectPaymentHandler = async (req, res, next) => {
 
     const { reason } = req.body || {};
     const result = await rejectPayment(id, reason);
+
+    // Send payment rejected email (non-blocking soft-fail)
+    const ctx = await getRegistrationEmailContext(result.registration.RegID);
+    if (ctx) {
+      await sendPaymentRejectedEmail({
+        to: ctx.userEmail,
+        fullName: ctx.userFullName,
+        eventName: ctx.eventName,
+        amount: parseFloat(result.payment.Amount) || 0,
+        reason: reason || null,
+      });
+    }
 
     return res.status(200).json({
       success: true,
