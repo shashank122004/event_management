@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GFG Club</title>
+
+  <!-- Bootstrap 5 CDN -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Bootstrap Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    rel="stylesheet"
+  />
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ======= NAVBAR ======= -->
+  <nav class="navbar navbar-expand-lg navbar-light gfg-navbar sticky-top">
+    <div class="container-fluid px-4 px-lg-5">
+
+      <!-- Brand -->
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <div class="brand-icon">G</div>
+        <span class="brand-text"><span class="brand-gfg">GFG</span> <span class="brand-club">Club</span></span>
+      </a>
+
+      <!-- Toggler -->
+      <button
+        class="navbar-toggler border-0 shadow-none"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mainNav"
+        aria-controls="mainNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Nav Links -->
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-center gap-1 gap-lg-2">
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="#">Events</a>
+          </li>
+          <li class="nav-item">
+            <button class="btn theme-toggle-btn" id="themeToggle" aria-label="Toggle dark mode">
+              <i class="bi bi-moon" id="themeIcon"></i>
+            </button>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-login" href="login.html">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-signup" href="signup.html">Sign Up</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ======= HERO SECTION ======= -->
+  <section class="hero-section">
+    <!-- Decorative background orb -->
+    <div class="hero-orb"></div>
+    <div class="hero-ring hero-ring-1"></div>
+    <div class="hero-ring hero-ring-2"></div>
+
+    <div class="container text-center position-relative z-1">
+      <!-- Badge -->
+      <div class="d-flex justify-content-center mb-4">
+        <span class="hero-badge">
+          <i class="bi bi-code-slash me-2"></i>
+          College Club &bull; Code &bull; Create &bull; Collaborate
+        </span>
+      </div>
+
+      <!-- Heading -->
+      <h1 class="hero-heading mb-3">
+        Geeks<span class="text-green">for</span>Geeks
+      </h1>
+
+      <!-- Subtext -->
+      <p class="hero-subtext mx-auto mb-5">
+        Empowering the next generation of developers through<br class="d-none d-md-block" />
+        events, hackathons, and collaborative learning.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="signup.html" class="btn btn-hero-primary">
+          Get Started <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+        <a href="#" class="btn btn-hero-secondary">
+          Browse Events
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= STATS SECTION ======= -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="row g-4 justify-content-center">
+
+        <!-- Members -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="stat-card text-center">
+            <div class="stat-icon mb-3">
+              <i class="bi bi-people"></i>
+            </div>
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Members</div>
+          </div>
+        </div>
+
+        <!-- Events -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="stat-card text-center">
+            <div class="stat-icon mb-3">
+              <i class="bi bi-calendar3"></i>
+            </div>
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Events</div>
+          </div>
+        </div>
+
+        <!-- Hackathons -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="stat-card text-center">
+            <div class="stat-icon mb-3">
+              <i class="bi bi-trophy"></i>
+            </div>
+            <div class="stat-number">20+</div>
+            <div class="stat-label">Hackathons</div>
+          </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="stat-card text-center">
+            <div class="stat-icon mb-3">
+              <i class="bi bi-code-slash"></i>
+            </div>
+            <div class="stat-number">100+</div>
+            <div class="stat-label">Projects</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= MISSION SECTION ======= -->
+  <section class="mission-section">
+    <div class="container text-center">
+      <h2 class="mission-heading mb-4">
+        Our <span class="text-green">Mission</span>
+      </h2>
+      <p class="mission-text mx-auto">
+        We bridge the gap between academic learning and industry demands by organizing
+        coding competitions, technical workshops, hackathons, and networking events. Join us in
+        building a community of passionate developers who learn, grow, and innovate together.
+      </p>
+    </div>
+  </section>
+
+  <!-- ======= FOOTER ======= -->
+  <footer class="gfg-footer">
+    <div class="container text-center">
+      <p class="footer-text mb-0">
+        &copy; 2026 GeeksforGeeks College Club. Built with <i class="bi bi-heart-fill text-green"></i>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

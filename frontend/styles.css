@@ -1,0 +1,684 @@
+/* =========================================
+   GFG CLUB — styles.css
+   ========================================= */
+
+/* ---------- CSS Variables (Light Theme) ---------- */
+:root {
+  --green-primary: #2cb858;
+  --green-light: #e8f5ee;
+  --green-mid: #d4edd9;
+  --green-icon: #2cb858;
+  --bg-hero: #eef6ef;
+  --bg-stats: #f1f3f1;
+  --bg-mission: #f1f3f1;
+  --bg-navbar: #ffffff;
+  --text-dark: #111827;
+  --text-muted: #6b7280;
+  --card-bg: #ffffff;
+  --card-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+  --border-color: #e5e7eb;
+  --footer-bg: #f1f3f1;
+  --footer-text: #9ca3af;
+}
+
+/* ---------- Dark Theme ---------- */
+[data-theme="dark"] {
+  --bg-hero: #0f1a12;
+  --bg-stats: #111a14;
+  --bg-mission: #111a14;
+  --bg-navbar: #141f17;
+  --text-dark: #f0fdf4;
+  --text-muted: #9ca3af;
+  --card-bg: #1a2e1f;
+  --card-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  --border-color: #2d4033;
+  --footer-bg: #0f1a12;
+  --footer-text: #6b7280;
+  --green-light: #1a2e1f;
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-hero);
+  color: var(--text-dark);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* ---------- Utility ---------- */
+.text-green {
+  color: var(--green-primary);
+}
+
+.z-1 {
+  z-index: 1;
+}
+
+/* =========================================
+   NAVBAR
+   ========================================= */
+.gfg-navbar {
+  background-color: var(--bg-navbar);
+  border-bottom: 1px solid var(--border-color);
+  padding-top: 12px;
+  padding-bottom: 12px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Brand Icon */
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: var(--green-primary);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Brand Text */
+.brand-text {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-gfg {
+  color: var(--text-dark);
+}
+
+.brand-club {
+  color: var(--green-primary);
+}
+
+/* Nav Links */
+.nav-link-custom {
+  color: var(--text-muted) !important;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 6px 12px !important;
+  border-radius: 6px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-link-custom:hover {
+  color: var(--text-dark) !important;
+  background-color: var(--green-light);
+}
+
+/* Theme Toggle */
+.theme-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--green-light);
+  color: var(--green-primary);
+}
+
+/* Login Button */
+.btn-login {
+  color: var(--text-dark);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 8px;
+  background: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.btn-login:hover {
+  background-color: var(--green-light);
+  color: var(--text-dark);
+}
+
+/* Sign Up Button */
+.btn-signup {
+  background-color: var(--green-primary);
+  color: #ffffff !important;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 10px;
+  border: none;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-signup:hover {
+  background-color: #25a34e;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   HERO SECTION
+   ========================================= */
+.hero-section {
+  background-color: var(--bg-hero);
+  position: relative;
+  padding: 100px 20px 110px;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* Orb glow in center */
+.hero-orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(44, 184, 88, 0.13) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Decorative rings */
+.hero-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(44, 184, 88, 0.12);
+  pointer-events: none;
+}
+
+.hero-ring-1 {
+  width: 540px;
+  height: 540px;
+}
+
+.hero-ring-2 {
+  width: 700px;
+  height: 700px;
+  border-color: rgba(44, 184, 88, 0.07);
+}
+
+/* Hero Badge */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-dark);
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 7px 18px;
+  border-radius: 999px;
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Hero Heading */
+.hero-heading {
+  font-size: clamp(44px, 7vw, 76px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  color: var(--text-dark);
+}
+
+/* Hero Subtext */
+.hero-subtext {
+  font-size: clamp(15px, 2vw, 18px);
+  color: var(--text-muted);
+  max-width: 580px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* Hero Primary Button */
+.btn-hero-primary {
+  background-color: var(--green-primary);
+  color: #ffffff !important;
+  font-size: 15.5px;
+  font-weight: 600;
+  padding: 13px 30px;
+  border-radius: 12px;
+  border: none;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(44, 184, 88, 0.35);
+}
+
+.btn-hero-primary:hover {
+  background-color: #25a34e;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(44, 184, 88, 0.45);
+}
+
+/* Hero Secondary Button */
+.btn-hero-secondary {
+  background-color: var(--card-bg);
+  color: var(--text-dark) !important;
+  font-size: 15.5px;
+  font-weight: 600;
+  padding: 13px 30px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border-color);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-hero-secondary:hover {
+  background-color: var(--green-light);
+  border-color: var(--green-primary);
+  color: var(--text-dark) !important;
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   STATS SECTION
+   ========================================= */
+.stats-section {
+  background-color: var(--bg-stats);
+  padding: 70px 20px 80px;
+  transition: background-color 0.3s ease;
+}
+
+/* Stat Card */
+.stat-card {
+  background-color: var(--card-bg);
+  border-radius: 18px;
+  padding: 40px 28px 36px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+  height: 100%;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.11);
+}
+
+/* Stat Icon */
+.stat-icon {
+  font-size: 30px;
+  color: var(--green-icon);
+  line-height: 1;
+}
+
+/* Stat Number */
+.stat-number {
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--text-dark);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+/* Stat Label */
+.stat-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+}
+
+/* =========================================
+   MISSION SECTION
+   ========================================= */
+.mission-section {
+  background-color: var(--bg-mission);
+  padding: 80px 20px 90px;
+  transition: background-color 0.3s ease;
+}
+
+/* Mission Heading */
+.mission-heading {
+  font-size: clamp(30px, 4.5vw, 46px);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: var(--text-dark);
+}
+
+/* Mission Body Text */
+.mission-text {
+  font-size: clamp(14.5px, 1.8vw, 17px);
+  color: var(--text-muted);
+  line-height: 1.8;
+  max-width: 680px;
+  font-weight: 400;
+}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+.gfg-footer {
+  background-color: var(--footer-bg);
+  border-top: 1px solid var(--border-color);
+  padding: 22px 20px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.footer-text {
+  font-size: 13.5px;
+  color: var(--footer-text);
+  font-weight: 400;
+}
+
+.footer-text .text-green {
+  font-size: 13px;
+}
+
+/* =========================================
+   RESPONSIVE TWEAKS
+   ========================================= */
+@media (max-width: 991.98px) {
+  .hero-section {
+    padding: 80px 20px 90px;
+  }
+
+  .hero-ring-1 {
+    width: 380px;
+    height: 380px;
+  }
+
+  .hero-ring-2 {
+    width: 520px;
+    height: 520px;
+  }
+
+  .hero-orb {
+    width: 300px;
+    height: 300px;
+  }
+
+  .stats-section {
+    padding: 50px 20px 60px;
+  }
+
+  .mission-section {
+    padding: 60px 20px 70px;
+  }
+}
+
+
+
+@media (max-width: 575.98px) {
+  .hero-section { padding: 60px 16px 70px; }
+  .btn-hero-primary, .btn-hero-secondary { width: 100%; max-width: 280px; }
+  .stat-card { padding: 30px 20px; }
+  .stat-number { font-size: 34px; }
+  .hero-ring-1, .hero-ring-2, .hero-orb { display: none; }
+}
+
+/* =========================================
+   AUTH PAGES (login.html / signup.html)
+   ========================================= */
+
+/* Page wrapper — full-height background */
+.auth-page {
+  min-height: calc(100vh - 65px);
+  background-color: var(--bg-stats);
+  transition: background-color 0.3s ease;
+  padding-top: 48px !important;
+  padding-bottom: 48px !important;
+}
+
+/* Card */
+.auth-card {
+  background-color: var(--card-bg);
+  border-radius: 20px;
+  padding: 44px 40px 40px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.09);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Title */
+.auth-title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+/* Subtitle */
+.auth-subtitle {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+/* ---- Role Toggle ---- */
+.role-toggle {
+  display: flex;
+  background-color: var(--bg-stats);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  border: 1px solid var(--border-color);
+  transition: background-color 0.3s ease;
+}
+
+.role-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.role-btn.active {
+  background-color: var(--card-bg);
+  color: var(--text-dark);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+}
+
+.role-btn:not(.active):hover {
+  color: var(--text-dark);
+  background-color: rgba(44, 184, 88, 0.06);
+}
+
+/* ---- Form Labels ---- */
+.form-label-custom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+/* ---- Form Inputs ---- */
+.form-input {
+  width: 100%;
+  background-color: var(--bg-stats);
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-size: 14.5px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.75;
+}
+
+.form-input:focus {
+  border-color: var(--green-primary);
+  box-shadow: 0 0 0 3px rgba(44, 184, 88, 0.14);
+  background-color: var(--card-bg);
+}
+
+.form-input.is-invalid {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Select arrow */
+.form-select-custom {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+/* Password wrapper */
+.input-password-wrap {
+  position: relative;
+}
+
+.input-password-wrap .form-input {
+  padding-right: 44px;
+}
+
+.pw-toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.pw-toggle:hover {
+  color: var(--green-primary);
+}
+
+/* Inline validation messages */
+.invalid-feedback-custom {
+  display: none;
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.invalid-feedback-custom.visible {
+  display: block;
+}
+
+/* ---- Submit Button ---- */
+.btn-auth-primary {
+  width: 100%;
+  background-color: var(--green-primary);
+  color: #ffffff;
+  font-size: 15.5px;
+  font-weight: 700;
+  padding: 13px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(44, 184, 88, 0.32);
+}
+
+.btn-auth-primary:hover {
+  background-color: #25a34e;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(44, 184, 88, 0.42);
+}
+
+.btn-auth-primary:active {
+  transform: translateY(0);
+}
+
+/* ---- Footer text & link ---- */
+.auth-footer-text {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 0;
+}
+
+.auth-link {
+  color: var(--green-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-link:hover {
+  color: #25a34e;
+  text-decoration: underline;
+}
+
+/* ---- Admin notice banner ---- */
+.admin-notice {
+  background-color: rgba(44, 184, 88, 0.08);
+  border: 1px solid rgba(44, 184, 88, 0.25);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green-primary);
+  display: flex;
+  align-items: center;
+}
+
+/* ---- Required badge ---- */
+.badge-required {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 575.98px) {
+  .auth-card {
+    padding: 30px 22px 28px;
+    border-radius: 16px;
+  }
+
+  .auth-title {
+    font-size: 22px;
+  }
+}

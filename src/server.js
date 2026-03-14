@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import pool from './db.js';
 import adminRouter from './routes/admin.js';
 import usersRouter from './routes/users.js';
@@ -13,6 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 
 // Root route

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — GFG Club</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light gfg-navbar sticky-top">
+    <div class="container-fluid px-4 px-lg-5">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <div class="brand-icon">G</div>
+        <span class="brand-text"><span class="brand-gfg">GFG</span> <span class="brand-club">Club</span></span>
+      </a>
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-center gap-1 gap-lg-2">
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Events</a></li>
+          <li class="nav-item">
+            <button class="btn theme-toggle-btn" id="themeToggle" aria-label="Toggle dark mode">
+              <i class="bi bi-moon" id="themeIcon"></i>
+            </button>
+          </li>
+          <li class="nav-item"><a class="btn btn-login" href="login.html">Login</a></li>
+          <li class="nav-item"><a class="btn btn-signup" href="signup.html">Sign Up</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE BODY -->
+  <main class="auth-page d-flex align-items-start justify-content-center py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+
+          <!-- AUTH CARD -->
+          <div class="auth-card">
+
+            <!-- Heading -->
+            <div class="text-center mb-4">
+              <h1 class="auth-title">Create Account</h1>
+              <p class="auth-subtitle">Join the GeeksforGeeks Club</p>
+            </div>
+
+            <!-- Role Toggle -->
+            <div class="role-toggle mb-4" id="signupRoleToggle">
+              <button class="role-btn active" data-role="participant" type="button">
+                <i class="bi bi-person me-1"></i> Participant
+              </button>
+              <button class="role-btn" data-role="admin" type="button">
+                <i class="bi bi-shield-lock me-1"></i> Admin
+              </button>
+            </div>
+
+            <!-- ===== PARTICIPANT SIGNUP FORM ===== -->
+            <form id="participantSignupForm" class="auth-form" novalidate>
+
+              <div class="row g-3">
+                <!-- Student ID -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="p_studentID">Student ID</label>
+                  <input type="text" id="p_studentID" name="studentID" class="form-input"
+                    placeholder="CS2026055" required />
+                  <div class="invalid-feedback-custom">Student ID is required.</div>
+                </div>
+
+                <!-- Full Name -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="p_fullName">Full Name</label>
+                  <input type="text" id="p_fullName" name="fullName" class="form-input"
+                    placeholder="Aarav Sharma" required />
+                  <div class="invalid-feedback-custom">Full name is required.</div>
+                </div>
+
+                <!-- Username -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="p_username">Username</label>
+                  <input type="text" id="p_username" name="username" class="form-input"
+                    placeholder="aaravsharma" required />
+                  <div class="invalid-feedback-custom">Username is required.</div>
+                </div>
+
+                <!-- Phone -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="p_phone">Phone Number</label>
+                  <input type="tel" id="p_phone" name="phone" class="form-input"
+                    placeholder="+91 9876543210" required />
+                  <div class="invalid-feedback-custom">Phone number is required.</div>
+                </div>
+
+                <!-- Email -->
+                <div class="col-12">
+                  <label class="form-label-custom" for="p_email">Email</label>
+                  <input type="email" id="p_email" name="email" class="form-input"
+                    placeholder="you@example.com" required />
+                  <div class="invalid-feedback-custom">Enter a valid email.</div>
+                </div>
+
+                <!-- Password -->
+                <div class="col-12">
+                  <label class="form-label-custom" for="p_password">Password</label>
+                  <div class="input-password-wrap">
+                    <input type="password" id="p_password" name="password" class="form-input"
+                      placeholder="••••••••" required />
+                    <button type="button" class="pw-toggle" data-target="p_password" tabindex="-1">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                  <div class="invalid-feedback-custom">Password is required.</div>
+                </div>
+
+                <!-- University -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="p_university">University / College</label>
+                  <select id="p_university" name="uniID" class="form-input form-select-custom" required>
+                    <option value="" disabled selected>Select University</option>
+                    <option value="1">Siddaganga Institute Of Technology, Tumkur</option>
+                    <option value="2">Indian Institute of Technology Bombay</option>
+                    <option value="3">Delhi Technological University</option>
+                    <option value="4">Anna University</option>
+                  </select>
+                  <div class="invalid-feedback-custom">Please select your university.</div>
+                </div>
+
+                <!-- Branch -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="p_branch">Branch</label>
+                  <select id="p_branch" name="branchID" class="form-input form-select-custom" required>
+                    <option value="" disabled selected>Select Branch</option>
+                    <option value="1">Computer Science</option>
+                    <option value="2">Information Technology</option>
+                    <option value="3">Electronics & Communication</option>
+                    <option value="4">Electrical Engineering</option>
+                    <option value="5">Mechanical Engineering</option>
+                    <option value="6">Civil Engineering</option>
+                    <option value="7">Data Science</option>
+                    <option value="8">Artificial Intelligence</option>
+                    <option value="9">Cybersecurity</option>
+                    <option value="10">Other</option>
+                  </select>
+                  <div class="invalid-feedback-custom">Please select your branch.</div>
+                </div>
+
+                <!-- Graduation Year -->
+                <div class="col-12">
+                  <label class="form-label-custom" for="p_gradYear">Graduation Year</label>
+                  <select id="p_gradYear" name="graduationYear" class="form-input form-select-custom" required>
+                    <option value="" disabled selected>Select Year</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                  </select>
+                  <div class="invalid-feedback-custom">Please select graduation year.</div>
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <button type="submit" class="btn-auth-primary mt-4">
+                Create Account
+              </button>
+
+              <p class="auth-footer-text mt-3">
+                Already have an account? <a href="login.html" class="auth-link">Sign In</a>
+              </p>
+            </form>
+
+            <!-- ===== ADMIN SIGNUP FORM ===== -->
+            <form id="adminSignupForm" class="auth-form d-none" novalidate>
+
+              <div class="row g-3">
+                <!-- Student ID -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="a_studentID">Student ID</label>
+                  <input type="text" id="a_studentID" name="studentID" class="form-input"
+                    placeholder="CS2026055" required />
+                  <div class="invalid-feedback-custom">Student ID is required.</div>
+                </div>
+
+                <!-- Full Name -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="a_fullName">Full Name</label>
+                  <input type="text" id="a_fullName" name="fullName" class="form-input"
+                    placeholder="John Doe" required />
+                  <div class="invalid-feedback-custom">Full name is required.</div>
+                </div>
+
+                <!-- Phone -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="a_phone">Phone Number</label>
+                  <input type="tel" id="a_phone" name="phone" class="form-input"
+                    placeholder="+91 9876543210" required />
+                  <div class="invalid-feedback-custom">Phone number is required.</div>
+                </div>
+
+                <!-- Email -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="a_email">Email</label>
+                  <input type="email" id="a_email" name="email" class="form-input"
+                    placeholder="you@example.com" required />
+                  <div class="invalid-feedback-custom">Enter a valid email.</div>
+                </div>
+
+                <!-- Role -->
+                <div class="col-12">
+                  <label class="form-label-custom" for="a_role">Role</label>
+                  <select id="a_role" name="roleID" class="form-input form-select-custom" required>
+                    <option value="" disabled selected>Select Role</option>
+                    <option value="1">President</option>
+                    <option value="2">Vice President</option>
+                    <option value="3">Core Member</option>
+                  </select>
+                  <div class="invalid-feedback-custom">Please select your role.</div>
+                </div>
+
+                <!-- Password -->
+                <div class="col-12">
+                  <label class="form-label-custom" for="a_password">Password</label>
+                  <div class="input-password-wrap">
+                    <input type="password" id="a_password" name="password" class="form-input"
+                      placeholder="••••••••" required />
+                    <button type="button" class="pw-toggle" data-target="a_password" tabindex="-1">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                  <div class="invalid-feedback-custom">Password is required.</div>
+                </div>
+
+                <!-- Branch -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="a_branch">Branch</label>
+                  <select id="a_branch" name="branchID" class="form-input form-select-custom" required>
+                    <option value="" disabled selected>Select Branch</option>
+                    <option value="1">Computer Science</option>
+                    <option value="2">Information Technology</option>
+                    <option value="3">Electronics & Communication</option>
+                    <option value="4">Electrical Engineering</option>
+                    <option value="5">Mechanical Engineering</option>
+                    <option value="6">Civil Engineering</option>
+                    <option value="7">Data Science</option>
+                    <option value="8">Artificial Intelligence</option>
+                    <option value="9">Cybersecurity</option>
+                    <option value="10">Other</option>
+                  </select>
+                  <div class="invalid-feedback-custom">Please select your branch.</div>
+                </div>
+
+                <!-- Graduation Year -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-label-custom" for="a_gradYear">Graduation Year</label>
+                  <select id="a_gradYear" name="graduationYear" class="form-input form-select-custom" required>
+                    <option value="" disabled selected>Select Year</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                  </select>
+                  <div class="invalid-feedback-custom">Please select graduation year.</div>
+                </div>
+
+                <!-- Invitation Code -->
+                <div class="col-12">
+                  <label class="form-label-custom" for="a_inviteCode">
+                    Invitation Code
+                    <span class="badge-required">Required</span>
+                  </label>
+                  <input type="text" id="a_inviteCode" name="invitationCode" class="form-input"
+                    placeholder="INVITE2024XYZ" required />
+                  <div class="invalid-feedback-custom">Invitation code is required for admin signup.</div>
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <button type="submit" class="btn-auth-primary mt-4">
+                Create Admin Account
+              </button>
+
+              <p class="auth-footer-text mt-3">
+                Already have an account? <a href="login.html" class="auth-link">Sign In</a>
+              </p>
+            </form>
+
+          </div><!-- /auth-card -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast notification -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body fw-semibold" id="toastMessage">Account created successfully!</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
